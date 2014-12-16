@@ -5,7 +5,6 @@
 //  Created by 毕洪博 on 14-12-12.
 //  Copyright (c) 2014年 毕洪博. All rights reserved.
 //
-//
 
 #import "BHBCoreDataTool.h"
 
@@ -52,7 +51,7 @@ singletonImplementation(BHBCoreDataTool)
 - (BOOL)addWithEntity:(NSString *)entityName withDict:(NSDictionary *)dict
 {
     if(!entityName || [entityName isEqualToString:@""])
-        assert("新增的记录不能为空！");
+        assert("实体名字不能为空！");
     
         NSManagedObject * p = [NSEntityDescription insertNewObjectForEntityForName:entityName inManagedObjectContext:self.managedObjectContext];
     [self setPropertyListWithClassString:entityName andDict:dict andObj:p];
@@ -90,12 +89,30 @@ singletonImplementation(BHBCoreDataTool)
  */
 - (BOOL)updateWithEntity:(NSString *)entityName Predicate:(NSString *)predicate withDict:(NSDictionary *) dict
 {
+    return [self updateWithEntity:entityName Predicate:predicate withDict:dict withBlock:nil];
+}
+
+/**
+ *  自定义操作的更新
+ *
+ *  @param entityName 实体名
+ *  @param predicate  约束
+ *  @param dict       属性字典
+ *  @param enumblock  自定义操作，操作完毕后将会自动保存
+ *
+ *  @return 是否修改成功
+ */
+- (BOOL)updateWithEntity:(NSString *)entityName Predicate:(NSString *)predicate withDict:(NSDictionary *) dict withBlock:(ENUMBLOCK)enumblock
+{
     NSArray *result = [self selectWithEntity:entityName Predicate:predicate];
     for (id obj in result) {
+        if (enumblock) {
+            enumblock(obj,result);
+        }
         [self setPropertyListWithClassString:entityName andDict:dict andObj:obj];
     }
-   if( [_managedObjectContext save:nil])
-    return YES;
+    if( [_managedObjectContext save:nil])
+        return YES;
     return NO;
 }
 
@@ -103,6 +120,10 @@ singletonImplementation(BHBCoreDataTool)
 
 - (void) setPropertyListWithClassString:(NSString *) className andDict:(NSDictionary *)dict andObj:(id) obj
 {
+    if (!dict || ![dict isKindOfClass:[NSDictionary class]]) {
+        assert("你传的这个不是字典！");
+        return;
+    }
     u_int count;
     objc_property_t * property = class_copyPropertyList(NSClassFromString(className), &count);
     for(int i = 0; i < count; i++)

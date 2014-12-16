@@ -7,17 +7,19 @@
 //
 /**
  
- 本工具是基于coredata的数据库访问工具，主要功能是执行增删改差操作
+ 本工具是基于coredata的数据库访问工具，主要功能是执行增删改查操作
  使用本工具的步骤：
  1.创建coredata数据库，建立实体和关系（此处为coredata可视化操作的基本知识，不会的可以百度）。
  2.将本工具导入到工程中。
  3.设置数据库名和数据库保存类型两个宏，注意数据库名要与创建的momd文件名一致
- 4.执行增删改差操作，可以直接给实体名字和约束进行查询，修改和新增需要跟上一个属性字典
+ 4.用share方法获取单例对象，执行增删改查操作，可以直接给实体名字和约束进行查询，修改和新增需要带上一个属性字典
  
  例如：类A有2个属性name（string类型）sex(nsnumber类型),
 则传dict = @{@"name":@"xxx",@"sex":,@1}
  
- 仅供大家的学习和使用，如果因为使用本工具造成的一切后果与本人无关，欢迎与我交流
+ 工具写的比较简单，发现有什么bug或者你有更好的想法可以随时联系我。
+ 
+ 仅供大家的学习和交流使用，如果因为使用本工具造成的一切后果与本人无关，欢迎与我交流
  qq:403154749
  github:https://github.com/bb-coder
  blog:http://www.cnblogs.com/q403154749/
@@ -28,6 +30,8 @@
 
 #define KDBNAME @"MotionModel"//数据库名
 #define KDBTYPE @"sqlite"//数据库类型
+
+typedef void(^ENUMBLOCK)(id obj,NSArray *result);
 
 @interface BHBCoreDataTool : NSObject
 
@@ -75,5 +79,18 @@ singletonInterface(BHBCoreDataTool)
  *
  *  @return 修改是否成功
  */
+
 - (BOOL)updateWithEntity:(NSString *)entityName Predicate:(NSString *)predicate withDict:(NSDictionary *) dict;
+/**
+ *  自定义操作的更新
+ *
+ *  @param entityName 实体名
+ *  @param predicate  约束
+ *  @param dict       属性字典
+ *  @param enumblock  自定义操作，操作完毕后将会自动保存
+ *
+ *  @return 是否修改成功
+ */
+- (BOOL)updateWithEntity:(NSString *)entityName Predicate:(NSString *)predicate withDict:(NSDictionary *) dict withBlock:(ENUMBLOCK)enumblock;
+
 @end
