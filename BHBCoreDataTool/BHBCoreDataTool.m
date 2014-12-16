@@ -19,6 +19,21 @@ singletonImplementation(BHBCoreDataTool)
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
+/**
+ *  返回一个实体模型
+ *
+ *  @param entityName 实体名字
+ *
+ *  @return 实体模型
+ */
+- (id)entityWithName:(NSString *)entityName
+{
+    if (entityName && ![entityName isEqualToString:@""]) {
+        NSManagedObject * p = [NSEntityDescription insertNewObjectForEntityForName:entityName inManagedObjectContext:self.managedObjectContext];
+        return p;
+    }
+    return nil;
+}
 
 #pragma mark - 增删改查
 /**
@@ -59,6 +74,16 @@ singletonImplementation(BHBCoreDataTool)
         return YES;
         return NO;
 }
+//根据实体新增
+- (BOOL)addWithEntity:(id)obj
+{
+    if (obj) {
+        if ([self.managedObjectContext save:nil])
+            return YES;
+    }
+    return NO;
+}
+
 
 /**
  *  删除

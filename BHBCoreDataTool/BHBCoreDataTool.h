@@ -42,6 +42,14 @@ typedef void(^ENUMBLOCK)(id obj,NSArray *result);
 singletonInterface(BHBCoreDataTool)
 
 /**
+ *  返回一个实体模型
+ *
+ *  @param entityName 实体名字
+ *
+ *  @return 实体模型
+ */
+- (id)entityWithName:(NSString *)entityName;
+/**
  *  新增
  *
  *  @param entityName 实体名
@@ -50,7 +58,8 @@ singletonInterface(BHBCoreDataTool)
  *  @return 新增是否成功，yes为成功，no为失败
  */
 - (BOOL)addWithEntity:(NSString *)entityName withDict:(NSDictionary *)dict;
-
+//根据实体新增
+- (BOOL)addWithEntity:(id)obj;
 /**
  *  查询
  *
