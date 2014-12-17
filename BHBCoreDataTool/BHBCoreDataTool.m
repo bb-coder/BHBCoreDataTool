@@ -130,6 +130,9 @@ singletonImplementation(BHBCoreDataTool)
 - (BOOL)updateWithEntity:(NSString *)entityName Predicate:(NSString *)predicate withDict:(NSDictionary *) dict withBlock:(ENUMBLOCK)enumblock
 {
     NSArray *result = [self selectWithEntity:entityName Predicate:predicate];
+    if (!result || [result count] <= 0) {
+        return NO;
+    }
     for (id obj in result) {
         if (enumblock) {
             enumblock(obj,result);
@@ -146,7 +149,6 @@ singletonImplementation(BHBCoreDataTool)
 - (void) setPropertyListWithClassString:(NSString *) className andDict:(NSDictionary *)dict andObj:(id) obj
 {
     if (!dict || ![dict isKindOfClass:[NSDictionary class]]) {
-        assert("你传的这个不是字典！");
         return;
     }
     u_int count;
