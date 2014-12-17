@@ -44,13 +44,13 @@ singletonImplementation(BHBCoreDataTool)
  *
  *  @return 查询结果
  */
-- (NSArray *)selectWithEntity:(NSString *)entityName Predicate:(NSString *)predicate
+- (NSArray *)selectWithEntity:(NSString *)entityName Predicate:(NSPredicate *)predicate
 {
     if(!entityName || [entityName isEqualToString:@""])
         assert("实体名字不能为空！");
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:entityName];
     if(predicate)
-        request.predicate = [NSPredicate predicateWithFormat:predicate];
+        request.predicate = predicate;
     NSArray *array = [self.managedObjectContext executeFetchRequest:request error:nil];
         return array;
 }
@@ -93,7 +93,7 @@ singletonImplementation(BHBCoreDataTool)
  *
  *  @return 删除是否成功，yes成功，no不成功
  */
-- (BOOL)deleteWithEntity:(NSString *)entityName Predicate:(NSString *)predicate
+- (BOOL)deleteWithEntity:(NSString *)entityName Predicate:(NSPredicate *)predicate
 {
     NSArray *result = [self selectWithEntity:entityName Predicate:predicate];
     for (id obj in result) {
@@ -112,7 +112,7 @@ singletonImplementation(BHBCoreDataTool)
  *
  *  @return 修改是否成功
  */
-- (BOOL)updateWithEntity:(NSString *)entityName Predicate:(NSString *)predicate withDict:(NSDictionary *) dict
+- (BOOL)updateWithEntity:(NSString *)entityName Predicate:(NSPredicate *)predicate withDict:(NSDictionary *) dict
 {
     return [self updateWithEntity:entityName Predicate:predicate withDict:dict withBlock:nil];
 }
@@ -127,7 +127,7 @@ singletonImplementation(BHBCoreDataTool)
  *
  *  @return 是否修改成功
  */
-- (BOOL)updateWithEntity:(NSString *)entityName Predicate:(NSString *)predicate withDict:(NSDictionary *) dict withBlock:(ENUMBLOCK)enumblock
+- (BOOL)updateWithEntity:(NSString *)entityName Predicate:(NSPredicate *)predicate withDict:(NSDictionary *) dict withBlock:(ENUMBLOCK)enumblock
 {
     NSArray *result = [self selectWithEntity:entityName Predicate:predicate];
     if (!result || [result count] <= 0) {

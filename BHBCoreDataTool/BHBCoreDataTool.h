@@ -68,7 +68,7 @@ singletonInterface(BHBCoreDataTool)
  *
  *  @return 查询结果
  */
-- (NSArray *)selectWithEntity:(NSString *)entityName Predicate:(NSString *)predicate;
+- (NSArray *)selectWithEntity:(NSString *)entityName Predicate:(NSPredicate *)predicate;
 
 /**
  *  删除
@@ -78,7 +78,7 @@ singletonInterface(BHBCoreDataTool)
  *
  *  @return 删除是否成功，yes成功，no不成功
  */
-- (BOOL)deleteWithEntity:(NSString *)entityName Predicate:(NSString *)predicate;
+- (BOOL)deleteWithEntity:(NSString *)entityName Predicate:(NSPredicate *)predicate;
 
 /**
  *  更新
@@ -89,7 +89,7 @@ singletonInterface(BHBCoreDataTool)
  *  @return 修改是否成功
  */
 
-- (BOOL)updateWithEntity:(NSString *)entityName Predicate:(NSString *)predicate withDict:(NSDictionary *) dict;
+- (BOOL)updateWithEntity:(NSString *)entityName Predicate:(NSPredicate *)predicate withDict:(NSDictionary *) dict;
 /**
  *  自定义操作的更新
  *
@@ -100,6 +100,6 @@ singletonInterface(BHBCoreDataTool)
  *
  *  @return 是否修改成功
  */
-- (BOOL)updateWithEntity:(NSString *)entityName Predicate:(NSString *)predicate withDict:(NSDictionary *) dict withBlock:(ENUMBLOCK)enumblock;
+- (BOOL)updateWithEntity:(NSString *)entityName Predicate:(NSPredicate *)predicate withDict:(NSDictionary *) dict withBlock:(ENUMBLOCK)enumblock;
 
 @end
